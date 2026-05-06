@@ -1,0 +1,66 @@
+{
+  "entities": {
+    "Category": {
+      "title": "Category",
+      "description": "Category for photos",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the category"
+        },
+        "icon": {
+          "type": "string",
+          "description": "Emoji icon for the category"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "icon"]
+    },
+    "Photo": {
+      "title": "Photo",
+      "description": "A photo stored on Google Drive",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "drive_id": {
+          "type": "string"
+        },
+        "category_id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "required": ["title", "description", "drive_id", "category_id"]
+    }
+  },
+  "firestore": {
+    "/categories/{categoryId}": {
+      "schema": {
+        "$ref": "#/entities/Category"
+      },
+      "description": "Category documents"
+    },
+    "/photos/{photoId}": {
+      "schema": {
+        "$ref": "#/entities/Photo"
+      },
+      "description": "Photo documents"
+    }
+  }
+}

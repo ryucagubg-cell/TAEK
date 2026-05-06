@@ -1,0 +1,6 @@
+{
+  "name": "DriveProxy Gallery",
+  "description": "A modern, lightweight photo gallery that securely fetches and serves images from Google Drive using a backend proxy, bypassing hotlinking restrictions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
