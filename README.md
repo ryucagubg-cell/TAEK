@@ -1,20 +1,79 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# DriveProxy Gallery
 
-# Run and deploy your AI Studio app
+A modern, high-performance photo gallery application that integrates seamlessly with Google Drive. It uses a custom Node.js/Express proxy to securely fetch and serve images, bypassing common hotlinking restrictions and providing optimized thumbnails.
 
-This contains everything you need to run your app locally.
+## 🚀 Features
 
-View your app in AI Studio: https://ai.studio/apps/437e45f4-fac6-4df1-822b-0a6019c03586
+### 🖼️ Aesthetic Gallery
+- **Bento Grid Layout**: A visually striking, deterministic grid layout that optimizes for different screen sizes.
+- **Image Optimization**: Custom backend proxy supports thumbnail generation (`?w=`) to reduce bandwidth and improve load times.
+- **Smooth Animations**: Powered by Framer Motion for elegant transitions and modal interactions.
+- **Lightbox View**: Immersive full-screen image viewing with meta-data display.
 
-## Run Locally
+### 🔐 Admin Dashboard
+- **Authentication**: Secure login system powered by Firebase Authentication.
+- **Category Management**: Create, edit, and organize photos with custom icons and categories.
+- **Import & Sync**:
+  - **Single Import**: Add photos individually via Google Drive links.
+  - **Bulk Import**: Import entire folders from Google Drive in one click.
+- **Advanced Deletion**:
+  - **Select & Delete**: Multi-select mode for targeted cleanup.
+  - **Delete All**: Clean the entire gallery instantly.
+  - **Folder Cleanup**: Delete all photos imported from a specific Drive folder.
+- **Real-time Progress**: Visual progress bars and status updates during bulk operations (import/delete).
 
-**Prerequisites:**  Node.js
+## 🛠️ Tech Stack
 
+- **Frontend**:
+  - React 19
+  - Vite
+  - Tailwind CSS (v4)
+  - Framer Motion
+  - Lucide React Icons
+- **Backend**:
+  - Node.js & Express
+  - Axios for external API requests
+  - Proxy for Google Drive thumbnail & view APIs
+- **Database & Auth**:
+  - Firebase Firestore (NoSQL)
+  - Firebase Authentication
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 📦 Installation
+
+1. **Clone the repository**
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+3. **Environment Setup**:
+   Copy `.env.example` to `.env` and fill in your Firebase configuration and any other required keys.
+4. **Firebase Configuration**:
+   Ensure you have a `firebase-applet-config.json` file in the root with your project credentials.
+
+## 🏃 Running the App
+
+### Development
+```bash
+npm run dev
+```
+The server will start on `http://localhost:3000`, serving both the API routes and the Vite frontend.
+
+### Production Build
+```bash
+npm run build
+npm start
+```
+
+## 📂 Project Structure
+
+- `src/` - React frontend application.
+  - `components/` - Reusable UI components (Modal, AuthProvider, etc.).
+  - `pages/` - Main views (Gallery, AdminPanel, Login).
+  - `services/` - Database and API service layers.
+- `server.ts` - Express backend proxy and API handlers.
+- `api/` - Vercel/Serverless compatible endpoint handlers.
+- `firestore.rules` - Security rules for protected data access.
+
+## 📝 License
+
+This project is open-source and available under the [MIT License](LICENSE).

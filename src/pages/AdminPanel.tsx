@@ -24,53 +24,56 @@ export const AdminPanel: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-neutral-950 flex flex-col md:flex-row text-neutral-100 font-sans select-none">
-      {/* Sidebar */}
-      <aside className="w-full md:w-64 bg-neutral-950 border-r border-neutral-800 flex flex-col min-h-[50vh] md:min-h-screen p-4 gap-4">
-        <div className="flex items-center gap-3 px-2 py-4 mb-4">
-          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
-            <LayoutGrid className="w-5 h-5 text-white" />
+      {/* Sidebar / Top Nav on Mobile */}
+      <aside className="w-full md:w-64 bg-neutral-950 border-b md:border-b-0 md:border-r border-neutral-800 flex flex-col shrink-0">
+        <div className="flex items-center justify-between md:justify-start gap-3 px-6 py-5 md:py-8">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 shrink-0">
+              <LayoutGrid className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <span className="font-bold tracking-tight text-lg leading-tight block">Admin<span className="text-indigo-400">.Panel</span></span>
+              <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-medium hidden sm:block">Control Center</p>
+            </div>
           </div>
-          <div>
-            <span className="font-bold tracking-tight text-lg leading-tight">Admin<span className="text-indigo-400">.Panel</span></span>
-            <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-medium">Dashboard</p>
-          </div>
+          {/* Mobile Tab Indicator/Button can go here if needed */}
         </div>
         
-        <nav className="flex-1 flex flex-col gap-1">
+        <nav className="flex md:flex-col gap-1 px-4 pb-4 md:pt-4 overflow-x-auto md:overflow-x-visible hide-scrollbar">
           <button
             onClick={() => setActiveTab("dashboard")}
             className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
-              activeTab === "dashboard" ? "bg-neutral-900 border border-neutral-800 text-indigo-400" : "text-neutral-400 hover:bg-neutral-900/50 hover:text-neutral-200 border border-transparent"
+              "flex items-center gap-2 md:gap-3 px-4 md:px-3 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap",
+              activeTab === "dashboard" ? "bg-neutral-900 border border-neutral-800 text-indigo-400" : "text-neutral-500 hover:text-neutral-200 border border-transparent"
             )}
           >
             <BarChart2 className="w-4 h-4" />
-            Dashboard
+            <span>Dashboard</span>
           </button>
           <button
             onClick={() => setActiveTab("photos")}
             className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
-              activeTab === "photos" ? "bg-neutral-900 border border-neutral-800 text-indigo-400" : "text-neutral-400 hover:bg-neutral-900/50 hover:text-neutral-200 border border-transparent"
+              "flex items-center gap-2 md:gap-3 px-4 md:px-3 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap",
+              activeTab === "photos" ? "bg-neutral-900 border border-neutral-800 text-indigo-400" : "text-neutral-500 hover:text-neutral-200 border border-transparent"
             )}
           >
             <Image className="w-4 h-4" />
-            Photos
+            <span>Photos</span>
           </button>
           <button
             onClick={() => setActiveTab("categories")}
             className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
-              activeTab === "categories" ? "bg-neutral-900 border border-neutral-800 text-indigo-400" : "text-neutral-400 hover:bg-neutral-900/50 hover:text-neutral-200 border border-transparent"
+              "flex items-center gap-2 md:gap-3 px-4 md:px-3 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap",
+              activeTab === "categories" ? "bg-neutral-900 border border-neutral-800 text-indigo-400" : "text-neutral-500 hover:text-neutral-200 border border-transparent"
             )}
           >
             <LayoutGrid className="w-4 h-4" />
-            Categories
+            <span>Categories</span>
           </button>
         </nav>
 
-        <div className="mt-auto border-t border-neutral-800 pt-4">
-          <div className="px-2 mb-4 text-xs text-neutral-500 truncate font-mono">{user?.email}</div>
+        <div className="hidden md:flex mt-auto border-t border-neutral-800 p-4 flex-col gap-4">
+          <div className="px-2 text-xs text-neutral-500 truncate font-mono">{user?.email}</div>
           <button
             onClick={logOut}
             className="flex items-center justify-center gap-2 px-3 py-2.5 w-full rounded-xl text-sm font-bold text-red-400 border border-red-500/10 hover:bg-red-500/10 hover:border-red-500/20 transition-all bg-neutral-900"
@@ -131,7 +134,7 @@ const DashboardTab: React.FC<{ photos: Photo[], categories: Category[] }> = ({ p
                <div key={p.id} className="p-4 flex items-center justify-between hover:bg-neutral-800/50 transition-colors">
                  <div className="flex items-center gap-4">
                    <div className="w-12 h-12 bg-neutral-800 rounded-xl overflow-hidden shrink-0">
-                     <img src={`/api/photos/view/${p.drive_id}`} alt={p.title} className="w-full h-full object-cover" />
+                     <img src={`/api/photos/view/${p.drive_id}?w=400`} alt={p.title} className="w-full h-full object-cover" />
                    </div>
                    <div>
                      <p className="font-bold text-sm text-neutral-200">{p.title}</p>
@@ -289,6 +292,12 @@ const PhotosManager: React.FC<{ photos: Photo[], categories: Category[] }> = ({ 
   const [editingId, setEditingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
+  const [isImportingFolder, setIsImportingFolder] = useState(false);
+  const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [selectedPhotoIds, setSelectedPhotoIds] = useState<Set<string>>(new Set());
+  const [isSelecting, setIsSelecting] = useState(false);
+  const [progressStatus, setProgressStatus] = useState<string>("");
+  const [progressPercent, setProgressPercent] = useState<number>(0);
   
   const [formData, setFormData] = useState({
     title: "",
@@ -297,10 +306,45 @@ const PhotosManager: React.FC<{ photos: Photo[], categories: Category[] }> = ({ 
     category_id: ""
   });
 
+  const parseDriveId = (input: string) => {
+    // Regex for file ID: d/ID/view or id=ID or simply the ID string
+    const fileRegex = /(?:[\/=d]\/|id=)([a-zA-Z0-9-_]{25,})/;
+    // Regex for folder ID: folders/ID
+    const folderRegex = /folders\/([a-zA-Z0-9-_]{25,})/;
+    
+    // Check for folder first
+    const folderMatch = input.match(folderRegex);
+    if (folderMatch) return { id: folderMatch[1], type: 'folder' as const };
+    
+    const fileMatch = input.match(fileRegex);
+    if (fileMatch) return { id: fileMatch[1], type: 'file' as const };
+    
+    // Fallback: if it's already a clean ID
+    if (input.length >= 25 && !input.includes('/') && !input.includes('?')) {
+      return { id: input, type: 'file' as const };
+    }
+    
+    return { id: input, type: 'unknown' as const };
+  };
+
+  const handleDriveIdChange = (val: string) => {
+    const parsed = parseDriveId(val);
+    setFormData({ ...formData, drive_id: parsed.id });
+    
+    // If it's a folder link, notify user we could batch import
+    if (parsed.type === 'folder' && !editingId) {
+       setImportStatus("Google Drive folder detected. Click 'Import Folder' to add all photos.");
+    } else {
+       setImportStatus(null);
+    }
+  };
+
   const resetForm = () => {
     setFormData({ title: "", description: "", drive_id: "", category_id: "" });
     setIsModalOpen(false);
     setEditingId(null);
+    setIsImportingFolder(false);
+    setImportStatus(null);
   };
 
   const handleEdit = (p: Photo) => {
@@ -314,9 +358,149 @@ const PhotosManager: React.FC<{ photos: Photo[], categories: Category[] }> = ({ 
     setIsModalOpen(true);
   };
 
+  const handleDeleteAllPhotos = async () => {
+    if (photos.length === 0) {
+      alert("No photos to delete.");
+      return;
+    }
+
+    if (confirm(`Are you absolutely sure you want to delete ALL ${photos.length} photos? This action cannot be undone.`)) {
+      setProgressStatus("Starting deletion of all photos...");
+      setProgressPercent(0);
+      try {
+        await dbService.bulkDeletePhotos(photos.map(p => p.id), (done, total) => {
+           setProgressPercent(Math.round((done / total) * 100));
+           setProgressStatus(`Deleted ${done} / ${total} photos`);
+        });
+        setProgressStatus("All photos deleted successfully.");
+        setTimeout(() => { setProgressStatus(""); setProgressPercent(0); }, 3000);
+      } catch (e: any) {
+        setProgressStatus("Delete failed: " + e.message);
+      }
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    if (selectedPhotoIds.size === 0) return;
+    if (confirm(`Are you sure you want to delete ${selectedPhotoIds.size} selected photos?`)) {
+       setProgressStatus(`Deleting ${selectedPhotoIds.size} selected photos...`);
+       setProgressPercent(0);
+       try {
+         await dbService.bulkDeletePhotos(Array.from(selectedPhotoIds), (done, total) => {
+           setProgressPercent(Math.round((done / total) * 100));
+           setProgressStatus(`Deleted ${done} / ${total} selected photos`);
+         });
+         setSelectedPhotoIds(new Set());
+         setIsSelecting(false);
+         setProgressStatus("Selected photos deleted.");
+         setTimeout(() => { setProgressStatus(""); setProgressPercent(0); }, 3000);
+       } catch (e: any) {
+         setProgressStatus("Delete failed: " + e.message);
+       }
+    }
+  }
+
+  const handleDeleteImportedFolder = async () => {
+    const driveInput = prompt("Enter the Folder Google Drive URL or ID that you want to delete:");
+    if (!driveInput) return;
+
+    const parsed = parseDriveId(driveInput);
+    if (!parsed || parsed.type !== 'folder') {
+      alert("Invalid folder ID or URL. Make sure it's a folder link.");
+      return;
+    }
+
+    const descToMatch = `Bulk imported from folder: ${parsed.id}`;
+    const photosToDelete = photos.filter(p => p.description && p.description.includes(descToMatch));
+    
+    if (photosToDelete.length === 0) {
+      alert("No photos found imported from this folder. Ensure you pasted the exact folder link.");
+      return;
+    }
+
+    if (confirm(`Are you sure you want to delete ${photosToDelete.length} photos imported from this folder?`)) {
+      setProgressStatus(`Starting folder deletion of ${photosToDelete.length} photos...`);
+      setProgressPercent(0);
+      try {
+        await dbService.bulkDeletePhotos(photosToDelete.map(p => p.id), (done, total) => {
+          setProgressPercent(Math.round((done / total) * 100));
+          setProgressStatus(`Deleted ${done} / ${total} photos from folder`);
+        });
+        setProgressStatus("Folder deleted successfully.");
+        setTimeout(() => { setProgressStatus(""); setProgressPercent(0); }, 3000);
+      } catch (e: any) {
+        setProgressStatus("Delete failed: " + e.message);
+      }
+    }
+  };
+
+  const handleBatchImport = async () => {
+    if (!formData.drive_id || !formData.category_id) {
+      alert("Please provide Folder ID and Category.");
+      return;
+    }
+
+    setIsImportingFolder(true);
+    setImportStatus("Reading folder contents...");
+
+    try {
+      const resp = await fetch(`/api/photos/list-folder/${formData.drive_id}`);
+      if (!resp.ok) throw new Error("Failed to list folder");
+      
+      const { files } = await resp.json();
+      
+      if (!files || files.length === 0) {
+        setImportStatus("No images found in this folder.");
+        setIsImportingFolder(false);
+        return;
+      }
+
+      setImportStatus(`Found ${files.length} images. Syncing...`);
+
+      const photosToCreate = files.map((file: any, i: number) => {
+        return {
+          id: `${Date.now()}_${i}`,
+          photo: {
+            title: (file.name ? file.name.split('.')[0] : "Photo").substring(0, 190) || "Photo",
+            description: `Bulk imported from folder: ${formData.drive_id}`.substring(0, 999),
+            drive_id: file.id,
+            category_id: formData.category_id
+          }
+        };
+      });
+
+      await dbService.bulkCreatePhotos(photosToCreate, (done, total) => {
+        setImportStatus(`Imported ${done}/${total}...`);
+      });
+
+      setImportStatus("Successfully imported all images!");
+      setTimeout(() => {
+        resetForm();
+      }, 1500);
+    } catch (err: any) {
+      console.error(err);
+      setImportStatus("Error during import. Ensure folder is public.");
+      setIsImportingFolder(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title || !formData.drive_id || !formData.category_id) return;
+    
+    // Check if it's a folder import scenario
+    if (importStatus && importStatus.includes("detected") && !editingId) {
+      if (!formData.category_id) {
+        alert("Please select a category for the folder import.");
+        return;
+      }
+      await handleBatchImport();
+      return;
+    }
+
+    if (!formData.title || !formData.drive_id || !formData.category_id) {
+      alert("Please fill in Title, Drive ID, and Category.");
+      return;
+    }
 
     try {
       if (editingId) {
@@ -340,12 +524,23 @@ const PhotosManager: React.FC<{ photos: Photo[], categories: Category[] }> = ({ 
 
   return (
     <div className="space-y-6">
+       {progressStatus && (
+         <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4 flex flex-col gap-2">
+            <div className="flex justify-between text-sm font-bold">
+              <span>{progressStatus}</span>
+              <span>{progressPercent}%</span>
+            </div>
+            <div className="w-full h-2 bg-neutral-800 rounded-full overflow-hidden">
+              <div className="h-full bg-indigo-500 transition-all duration-300" style={{ width: `${progressPercent}%` }}></div>
+            </div>
+         </div>
+       )}
        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
          <div>
            <h2 className="text-2xl font-bold tracking-tight">Manage Photos</h2>
            <p className="text-xs text-neutral-500 uppercase tracking-widest mt-1">Photo proxy service</p>
          </div>
-         <div className="flex flex-col sm:flex-row gap-3">
+         <div className="flex flex-col sm:flex-row flex-wrap gap-3 w-full sm:w-auto">
            <div className="relative">
              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
              <input
@@ -374,6 +569,41 @@ const PhotosManager: React.FC<{ photos: Photo[], categories: Category[] }> = ({ 
              <Plus className="w-4 h-4" />
              Add Photo
            </button>
+           <button
+             onClick={() => {
+               if (isSelecting) {
+                 setIsSelecting(false);
+                 setSelectedPhotoIds(new Set());
+               } else {
+                 setIsSelecting(true);
+               }
+             }}
+             className={cn("flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all sm:ml-auto", isSelecting ? "bg-indigo-500/20 text-indigo-400 border border-indigo-500/30" : "bg-neutral-800 hover:bg-neutral-700 text-neutral-300")}
+           >
+             {isSelecting ? "Cancel Selection" : "Select Photos"}
+           </button>
+           {isSelecting && selectedPhotoIds.size > 0 && (
+             <button
+               onClick={handleDeleteSelected}
+               className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 shadow-lg shadow-red-500/20 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
+             >
+               <Trash2 className="w-4 h-4" /> Delete ({selectedPhotoIds.size})
+             </button>
+           )}
+           <button
+             onClick={handleDeleteImportedFolder}
+             className="flex items-center justify-center gap-2 bg-red-600/10 border border-red-500/20 hover:bg-red-600/20 text-red-400 px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
+             title="Delete a folder that was previously bulk-imported"
+           >
+             <Trash2 className="w-4 h-4" /> Delete Imported Folder
+           </button>
+           <button
+             onClick={handleDeleteAllPhotos}
+             className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 shadow-lg shadow-red-500/20 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-all"
+             title="Delete ALL photos in the gallery"
+           >
+             <Trash2 className="w-4 h-4" /> Delete All
+           </button>
          </div>
        </div>
 
@@ -389,11 +619,25 @@ const PhotosManager: React.FC<{ photos: Photo[], categories: Category[] }> = ({ 
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold uppercase tracking-widest text-neutral-400 mb-1.5">Google Drive File ID</label>
+            <label className="block text-[10px] font-bold uppercase tracking-widest text-neutral-400 mb-1.5">Google Drive URL or ID</label>
             <div className="flex relative">
-              <input type="text" value={formData.drive_id} onChange={e => setFormData({...formData, drive_id: e.target.value})} className="w-full px-4 py-3 bg-neutral-900 border border-neutral-800 rounded-xl focus:ring-2 focus:ring-indigo-500 transition-colors placeholder:text-neutral-600 outline-none font-mono text-sm text-neutral-100" required placeholder="1O_abcd1234..." />
+              <input 
+                type="text" 
+                value={formData.drive_id} 
+                onChange={e => handleDriveIdChange(e.target.value)} 
+                className="w-full px-4 py-3 bg-neutral-900 border border-neutral-800 rounded-xl focus:ring-2 focus:ring-indigo-500 transition-colors placeholder:text-neutral-600 outline-none font-mono text-sm text-neutral-100" 
+                required 
+                placeholder="Paste Drive link or ID..." 
+              />
             </div>
-            <p className="text-[10px] text-neutral-500 mt-2 leading-relaxed">Right click file in Drive &gt; Share &gt; Copy link. Extract the ID from the URL.</p>
+            {importStatus ? (
+              <p className={cn(
+                "text-[10px] mt-2 font-medium truncate",
+                importStatus.includes("Error") ? "text-red-400" : "text-indigo-400"
+              )}>{importStatus}</p>
+            ) : (
+              <p className="text-[10px] text-neutral-500 mt-2 leading-relaxed">Paste a file link or a folder link to import everything.</p>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -411,49 +655,93 @@ const PhotosManager: React.FC<{ photos: Photo[], categories: Category[] }> = ({ 
             <textarea rows={3} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full px-4 py-3 bg-neutral-900 border border-neutral-800 rounded-xl focus:ring-2 focus:ring-indigo-500 transition-colors placeholder:text-neutral-600 outline-none resize-none text-sm text-neutral-100" placeholder="Source info or description..." />
           </div>
 
-          <div className="flex justify-end pt-4">
-            <button type="submit" className="bg-indigo-600 text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all">
-              {editingId ? "Update Config" : "Generate Proxy"}
+          <div className="flex justify-end gap-3 pt-4">
+            {importStatus && importStatus.includes("detected") && !isImportingFolder && (
+              <button 
+                type="button" 
+                onClick={handleBatchImport}
+                className="bg-neutral-800 text-indigo-400 border border-neutral-700 px-6 py-3 rounded-xl text-sm font-bold hover:bg-neutral-700 transition-all"
+              >
+                Import Folder
+              </button>
+            )}
+            <button 
+              type="submit" 
+              disabled={isImportingFolder}
+              className="bg-indigo-600 text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all disabled:opacity-50"
+            >
+              {isImportingFolder ? "Importing..." : (editingId ? "Update Config" : "Generate Proxy")}
             </button>
           </div>
         </form>
       </Modal>
 
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 grid-flow-dense auto-rows-[160px] md:auto-rows-[200px]">
          {filteredPhotos.map(photo => {
            const cat = categories.find(c => c.id === photo.category_id);
+           
+           // Deterministic Grid Spacing for Bento Grid
+           let sum = 0;
+           for(let i=0; i<photo.drive_id.length; i++) sum += photo.drive_id.charCodeAt(i);
+           const mod = sum % 10;
+           let gridClass = "col-span-1 row-span-1";
+           if (mod === 0) gridClass = "col-span-2 row-span-2";
+           else if (mod === 1) gridClass = "col-span-1 row-span-2";
+           else if (mod === 2) gridClass = "col-span-2 row-span-1";
+           
            return (
-           <div key={photo.id} className="bg-neutral-900 rounded-3xl border border-neutral-800 overflow-hidden flex flex-col group relative">
-             <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent z-10 pointer-events-none"></div>
-             <div className="aspect-square bg-neutral-800 relative z-0">
-               <img 
-                 src={`/api/photos/view/${photo.drive_id}`} 
-                 alt={photo.title}
-                 loading="lazy"
-                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                 onError={(e) => {
-                   (e.target as HTMLImageElement).src = 'https://placehold.co/600x400/262626/737373.png?text=Sync+Error';
-                 }}
-               />
-               <div className="absolute top-4 right-4 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                 <button onClick={() => handleEdit(photo)} className="p-2 backdrop-blur-md bg-black/40 border border-white/10 rounded-xl text-neutral-300 hover:text-indigo-400 hover:bg-black/60 transition-all shadow-xl">
+           <div 
+             key={photo.id} 
+             onClick={() => {
+               if (isSelecting) {
+                 const newSet = new Set(selectedPhotoIds);
+                 if (newSet.has(photo.id)) newSet.delete(photo.id);
+                 else newSet.add(photo.id);
+                 setSelectedPhotoIds(newSet);
+               }
+             }}
+             className={cn("bg-neutral-900 rounded-2xl md:rounded-3xl border overflow-hidden flex flex-col group relative shadow-md hover:shadow-2xl transition-all duration-300 transform", gridClass, selectedPhotoIds.has(photo.id) ? "border-indigo-500 ring-2 ring-indigo-500/50 scale-95" : "border-neutral-800", isSelecting ? "cursor-pointer" : "")}>
+             {isSelecting && (
+               <div className="absolute top-4 left-4 z-30">
+                 <div className={cn("w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all", selectedPhotoIds.has(photo.id) ? "bg-indigo-500 border-indigo-500" : "border-white/50 bg-black/20 backdrop-blur-md")}>
+                   {selectedPhotoIds.has(photo.id) && <div className="w-2.5 h-2.5 bg-white rounded-full"></div>}
+                 </div>
+               </div>
+             )}
+             <div className="absolute inset-0 bg-neutral-800"></div>
+             <img 
+               src={`/api/photos/view/${photo.drive_id}?w=400`} 
+               alt={photo.title}
+               loading="lazy"
+               className={cn("w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 relative z-0", selectedPhotoIds.has(photo.id) ? "opacity-70" : "")}
+               onError={(e) => {
+                 (e.target as HTMLImageElement).src = 'https://placehold.co/600x400/262626/737373.png?text=Sync+Error';
+               }}
+             />
+             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
+             
+             {!isSelecting && (
+               <div className="absolute top-3 right-3 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-all translate-y-[-10px] group-hover:translate-y-0">
+                 <button onClick={(e) => { e.stopPropagation(); handleEdit(photo); }} className="p-2 backdrop-blur-md bg-black/50 border border-white/20 rounded-xl text-neutral-200 hover:text-indigo-400 hover:bg-black/80 transition-all shadow-xl">
                    <Edit2 className="w-4 h-4" />
                  </button>
-                 <button onClick={() => {
+                 <button onClick={(e) => {
+                   e.stopPropagation();
                    if(confirm("Delete this proxy config?")) dbService.deletePhoto(photo.id);
-                 }} className="p-2 backdrop-blur-md bg-black/40 border border-white/10 rounded-xl text-neutral-300 hover:text-red-400 hover:bg-black/60 transition-all shadow-xl">
+                 }} className="p-2 backdrop-blur-md bg-black/50 border border-white/20 rounded-xl text-neutral-200 hover:text-red-400 hover:bg-black/80 transition-all shadow-xl">
                    <Trash2 className="w-4 h-4" />
                  </button>
                </div>
-             </div>
-             <div className="absolute bottom-6 left-6 right-6 z-20 pointer-events-none">
-               <div className="flex items-center gap-2 mb-2">
-                 <span className="px-2 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[10px] font-bold uppercase tracking-widest rounded shadow-sm shrink-0">
+             )}
+
+             <div className="absolute bottom-4 left-4 right-4 z-20 pointer-events-none flex flex-col justify-end">
+               <div className="flex flex-wrap items-center gap-2 mb-1.5 opacity-0 group-hover:opacity-100 transition-opacity delay-100">
+                 <span className="px-1.5 py-0.5 bg-indigo-500/20 backdrop-blur-md text-indigo-300 border border-indigo-500/30 text-[9px] font-bold uppercase tracking-widest rounded">
                    {cat?.icon} {cat?.name || "Uncategorized"}
                  </span>
                </div>
-               <h3 className="font-bold text-xl leading-tight truncate text-neutral-100">{photo.title}</h3>
-               <p className="text-xs text-neutral-400 font-mono mt-1 opacity-75 truncate">{photo.drive_id.substring(0, 10)}... • SG Node</p>
+               <h3 className="font-bold text-sm sm:text-base md:text-lg leading-tight truncate text-neutral-100 drop-shadow-md">{photo.title}</h3>
+               <p className="text-[9px] md:text-[10px] text-neutral-400 font-mono mt-0.5 opacity-0 group-hover:opacity-75 transition-opacity delay-150 truncate drop-shadow-md">{photo.drive_id.substring(0, 10)}... • G-Node</p>
              </div>
            </div>
            )
